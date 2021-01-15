@@ -1,0 +1,107 @@
+---
+title: "Single-Table Analysis with dplyr"
+author: "Katelyn Diaz"
+date: "`r Sys.Date()`"
+output: openintro::lab_report
+---
+
+```{r load-packages, message=FALSE}
+library(tidyverse)
+library(openintro)
+library(babynames)
+# head means that it will show you the first few rows of that data set
+head(babynames)
+
+```
+
+``` {r}
+# Find a subset of the columns using select():
+babynames %>%
+  select(year, name, n) %>%
+  head()
+
+# Find a subset of the rows using filter():
+babynames %>%
+  filter(name == "Bella") %>%
+  head()
+
+# Do both and assign the result to a new object:
+bella <- babynames %>%
+  filter(name == "Bella") %>%
+  select(year, name, sex, n)
+
+# Check the dimensions of that object, view the first few rows, and verify what kind of object it is:
+dim(bella)
+head(bella)
+class(bella)
+
+# Note that bella is a tbl_df, a tbl, and a data.frame. Objects in R can have more than one type!
+# Let’s make a quick plot of the popularity of Bella over time.
+library(ggplot2)
+ggplot(data = bella, aes(x = year, y = n)) + 
+  geom_line(aes(color = sex))
+
+# Use mutate() to create new variables. Here, we define a variable called popular that is TRUE if the name was assigned to more than 1% of all babies in that year.
+babynames <- babynames %>%
+  mutate(popular = prop > 0.01)
+
+# Use rename() to rename a variable:
+babynames <- babynames %>%
+  rename(is_popular = popular)
+
+# Use the new variable (and filter()) to create a subset of the rows:
+popular <- babynames %>%
+  filter(is_popular)
+nrow(popular)
+head(popular)
+
+# What are the single most popular names of all time? To find them we can arrange() the table in descending order of the proportion of babies who got that name.
+popular %>%
+  arrange(desc(prop))
+
+```
+
+### Exercise 1: What does the value of the prop column in the first line of output above mean? Write one sentence to explain what it means to someone who has never taken a statistics course.
+
+Proportion of how often the name is used. i.e. in 1880, 0.0815 of the boys were named John
+
+### Exercise 2: Choose a name, and find the year in which that name was used most frequently.
+
+```{r exercise 2}
+babynames %>%
+  filter (name == "Elizabeth") %>%
+  arrange(desc(prop))
+  
+
+```
+
+### What was the most popular name that year? (year 1880)
+```{r}
+babynames %>%
+filter(year == 1880) %>%
+  arrange(desc(prop))
+```
+
+### Exercise 4: In which year was that name given to M and F babies most equally (i.e. closest to a 50/50 split)?
+```{r}
+bella %>%
+  summarize(num_rows = n(), most_bellas = max(n))
+```
+
+### Exercise 5: What does the value of num_rows represent (in real-world terms) in the previous result? Explain what it means to your neighbor and argue about it until you agree.
+It shows the number of years that there has been 5121 Bellas.
+
+### Exercise 6: Re-write the following expression using the pipe operator:
+arrange(select(filter(babynames, name == "Jordan"), -name), desc(prop))
+
+
+```{r}
+babynames %>%
+  filter (name == "Jordan") %>%
+  select (-name) %>%
+  arrange (desc(prop))
+
+```
+
+
+...
