@@ -1,0 +1,32 @@
+---
+title: "Mini Project 2"
+author: "Katelyn Diaz"
+date: "`r Sys.Date()`"
+output: openintro::lab_report
+---
+
+```{r load-packages, message=FALSE}
+library(tidyverse)
+library(openintro)
+library(mdsr)
+```
+
+### Joining two tables
+
+
+```{r code-chunk-label}
+Violations %>%
+  filter(zipcode == 11222) %>%
+  select(dba, violation_code, cuisine_code)
+  
+```
+
+```{r}
+Violations %>%
+  filter(zipcode == 11222) %>%
+  left_join(Cuisines)
+```
+
+
+...
+
