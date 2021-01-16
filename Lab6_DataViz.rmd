@@ -29,15 +29,18 @@ library(sds192)
 ```{r, fig.cap = "Katelyn Diaz"}
 diamonds
 
-diamond_plot <- ggplot(diamonds, aes(x= clarity, y = price, color = clarity))+
+diamond_plot <- ggplot(diamonds, aes(x= clarity, y = price
+                                     , color = color
+                                     ))+
   ggtitle("Price of diamonds depending on clarity and color") +
   ylab("Price ($)") +
-  xlab("Color of diamond, D=Colorless") +
+  xlab("Clarity of Diamond") +
   # fig.cap = "Katelyn Diaz" +
-  geom_violin() +
+  #geom_violin() +
  # geom_point() +
  # geom_smooth() +
-  facet_wrap(~color)+
+  geom_point() +
+  facet_wrap(~cut)+
   theme_economist()+
   scale_fill_distiller(palette = "Blues")
 diamond_plot
