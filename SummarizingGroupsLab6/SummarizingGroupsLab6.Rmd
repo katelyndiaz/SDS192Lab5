@@ -1,0 +1,136 @@
+---
+title: "Lab Name"
+author: "Author Name"
+date: "`r Sys.Date()`"
+output: openintro::lab_report
+---
+
+```{r load-packages, message=FALSE}
+library(tidyverse)
+library(openintro)
+library(babynames)
+```
+
+### Exercise 1: In which year was that name given to M and F babies most equally (i.e. closest to a 50/50 split)?
+
+1956 (proportion closest to .5)
+
+```{r}
+babynames %>%
+  filter(name == "Jackie") %>%
+  group_by(year) %>%
+  summarize(
+    num_sexes = n(), 
+    total = sum(n), 
+    boys = sum(ifelse(sex == "M", n, 0)),
+    girls = total - boys,
+    girl_pct = girls / total
+  )
+
+```
+
+### Exercise 2: Which year had the greatest number of births?
+```{r}
+babynames %>%
+  group_by(year) %>%
+   # group by year just groups everything by year. all the info for that single year. N = number of babies with that certain name (ie elizabeth)
+  summarise(
+    # compresses your data by what you told it to do
+    num_births = sum(n)
+    # adding/grouping all of the n's for a specific year, ie all the names from 1880 were added together, to equal the number of kids born that year
+  ) %>% 
+ 
+     arrange (desc(num_births))
+
+```
+
+### Exercise 3: In a single pipeline, compute the earliest and latest year that each name appears
+
+```{r}
+babynames %>%
+  group_by(name) %>%
+  summarize(
+    min_year = min(year), 
+    max_year = max(year)
+    # bu calling a variable like this, your variable won't be "global"
+  )
+```
+
+### Exercise 4: There are 15 names that have been assigned to both sexes in all 138 years. List them.
+
+```{r}
+# babynames %>%
+#   group_by(name) %>%
+#   summarise(
+#     total = sum(n), 
+#     num_girl = sum(ifelse(sex == "F", n, 0)),
+#     num_boys = sum(ifelse(sex == "M", n, 0)),
+#    # num_sex = sum(ifelse(num_sexes == 2, n, 0))
+#   ) %>%
+#   filter (years_used == "138") %>%
+#   filter (num_girls > 138)
+```
+
+### Exercise 5: Among popular names (let’s say at least 1% of the births in a given year), which name is the youngest—meaning that its first appearance as a popular name is the most recent?
+```{r}
+popular <- babynames %>%
+  mutate (popular = prop >= .01) %>%
+  # use one equal sign if you're creating the variable there and its the first time you're using it
+  filter(popular == TRUE) %>%
+  group_by(name) %>%
+  summarize(
+    first_time = min(year)
+  )
+
+popular %>%
+  arrange(desc(first_time))
+```
+
+### Exercise 8: Use ggplot2 and group_by() to create an interesting and informative data graphic. It need not be about baby names. Post your graphic and a short description of it to Slack.
+```{r}
+
+babynames_plot <- babynames %>%
+  
+  
+  
+my_storms <- storms %>%
+    filter(year == 1995)
+my_storms <- ggplot(data = my_storms, aes(group = name, x=long, y=lat, color = wind)) +
+  geom_line()
+my_storms +
+  facet_wrap(~name) +
+  scale_fill_distiller(palette = "Blues")
+# glimpse(diamonds)
+# 
+# diamond_plot <- diamonds %>%
+#   mutate(cut =)
+# 
+#   ggplot(diamonds, aes(y= price, x = carat))+
+#   facet_wrap(cut) +
+#   geom_boxplot()
+# diamond_plot
+#                        
+#   filter(popular == TRUE) %>%
+#   group_by(cut) %>%
+#   summarize(
+#     first_time = min(year)
+#   )
+# 
+# 
+# 
+# 
+# home_plot <- ggplot(housing, aes(y = State, x = Home.Price.Index)) + 
+#   geom_vline(xintercept = 1, linetype = "longdash", color = "black") +
+#   geom_point(aes(color = Date),
+#              alpha = 0.3,
+#              size = 1.5,
+#              position = position_jitter(width = 0, height = 0.25))
+# home_plot + 
+#   scale_color_continuous(breaks = c(1975.25, 1994.25, 2013.25),
+#                          labels = c(1971, 1994, 2013))
+```
+
+
+
+...
+
