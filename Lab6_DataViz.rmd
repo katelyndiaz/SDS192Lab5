@@ -1,0 +1,64 @@
+---
+title: "Lab 6, Exercise 8: Create a data graphic"
+subtitle: "SDS 192"
+author: "Katelyn Diaz"
+date: "`r format(Sys.Date(), '%B %e, %Y')`"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+    theme: lumen
+    df_print: paged
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  echo = TRUE
+)
+library(tidyverse)
+library(sds192)
+```
+
+### Exercise 8: Use ggplot2 and group_by() to create an interesting and informative data graphic. It need not be about baby names. Post your graphic and a short description of it to Slack.
+```{r, fig.cap = "Katelyn Diaz"}
+diamonds
+
+diamond_plot <- ggplot(diamonds, aes(x= clarity, y = price, color = clarity))+
+  ggtitle("Price of diamonds depending on clarity and color") +
+  ylab("Price ($)") +
+  xlab("Color of diamond, D=Colorless") +
+  # fig.cap = "Katelyn Diaz" +
+  geom_violin() +
+ # geom_point() +
+ # geom_smooth() +
+  facet_wrap(~color)+
+  theme_economist()+
+  scale_fill_distiller(palette = "Blues")
+diamond_plot
+```
+
+
+
+
+
+
+## Word count
+
+```{r word_count, message=FALSE, echo=FALSE}
+text_stats()
+```
+
+## Standards
+
+In this assignment, we attempted the following [standards](https://beanumber.github.io/sds192/standards.html):
+
+- `r standard_button("markdown")`: We met the Markdown standard because we...
+- `r standard_button("aesthetics")`: We met the Aesthetics standard because we...
+
+
